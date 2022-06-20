@@ -19,6 +19,9 @@ stages:
     when: always
     paths:
       - build/
+  allow_failure:
+    exit_codes:
+      - 2
 
 .test_plugin:
   image: kitware/paraview-for-ci:v5.10.1
