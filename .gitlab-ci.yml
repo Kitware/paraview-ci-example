@@ -9,7 +9,7 @@ stages:
     - cd build
     - cmake -DCMAKE_PREFIX_PATH=/opt/paraview/install/ -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release ..
     - cmake --build . --parallel 2
-    - exit 137
+    - ../check_warnings.sh
   tags:
     - docker
     - linux
