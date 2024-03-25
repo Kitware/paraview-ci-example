@@ -105,6 +105,11 @@ stages:
     - docker
     - linux-x86_64
     - paraview
+  artifacts:
+    expire_in: 1h
+    when: always
+    paths:
+      - build/
   interruptible: true
 
 .latest:
