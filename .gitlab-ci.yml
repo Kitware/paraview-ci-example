@@ -22,9 +22,9 @@ stages:
     - when: on_success
 
 .binary_5_12:
-  image: kitware/paraview_org-plugin-devel:5.12.0
+  image: kitware/paraview_org-plugin-devel:5.12.1
   variables:
-    PARAVIEW_VERSION: "5.12.0"
+    PARAVIEW_VERSION: "5.12.1"
   rules:
     - if: $DISABLE_5_12 == "True"
       when: never
@@ -122,9 +122,9 @@ stages:
     - when: on_success
 
 .v5_12:
-  image: kitware/paraview-for-ci:v5.12.0
+  image: kitware/paraview-for-ci:v5.12.1
   variables:
-    PARAVIEW_VERSION: "5.12.0"
+    PARAVIEW_VERSION: "5.12.1"
   rules:
     - if: $DISABLE_5_12 == "True"
       when: never
@@ -179,7 +179,7 @@ build_binary_compatible_latest:
     - .build_binary_compatible
     - .binary_latest
 
-build_binary_compatible_5.12.0:
+build_binary_compatible_5.12.1:
   extends:
     - .build_binary_compatible
     - .binary_5_12
@@ -208,19 +208,19 @@ test_plugin_latest:
   needs:
     - build_plugin_latest
 
-build_plugin_v5.12.0:
+build_plugin_v5.12.1:
   extends:
     - .build_plugin
     - .v5_12
 
-test_plugin_v5.12.0:
+test_plugin_v5.12.1:
   extends:
     - .test_plugin
     - .v5_12
   dependencies:
-    - build_plugin_v5.12.0
+    - build_plugin_v5.12.1
   needs:
-    - build_plugin_v5.12.0
+    - build_plugin_v5.12.1
 
 build_plugin_v5.11.2:
   extends:
