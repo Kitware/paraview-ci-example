@@ -53,12 +53,9 @@ jobs:
 
     steps:
 
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        path: 'source'
-        fetch-depth: 0
-        lfs: 'false'
+    - name: Manual Checkout
+      working-directory: ${{github.workspace}}
+      run: git clone https://github.com/${{github.repository}} source
 
     - name: Setup Directories
       working-directory: ${{github.workspace}}
@@ -76,8 +73,13 @@ jobs:
         source /opt/rh/devtoolset-7/enable
         cmake --build . --parallel 2
 
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        path: ./build/*
-        name: build
+    - name: Manual Upload Example # Replace with your own upload step
+      if: github.ref == 'refs/heads/main'
+      working-directory: ${{github.workspace}}
+      env:
+        DATA_TOKEN: ${{ secrets.DATA_TOKEN }}
+      run: |
+        zip -r artifacts.zip ./build
+        FILESIZE=`stat -c %s artifacts.zip`
+        TOKEN=`curl -X POST "https://data.kitware.com/api/v1/api_key/token?key=$DATA_TOKEN" -d "" | grep -oP '"token":\s*"\K[a-zA-Z0-9]*'`
+        curl -X POST "https://data.kitware.com/api/v1/file?parentId=5a4f9fa08d777f5e872f8103&name=artifacts.zip&parentType=folder&size=$FILESIZE&mimeType=application/zip" --data-binary "@./artifacts.zip" --header "Girder-Token: $TOKEN" -v --header "Content-Type: application/zip"
