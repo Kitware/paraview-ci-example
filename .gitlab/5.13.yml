@@ -21,7 +21,6 @@ build_binary_compatible_5.13.0:
       when: never
     - when: on_success
 
-
 build_plugin_v5.13.0:
   extends:
     - .build_plugin
