@@ -1,0 +1,24 @@
+.v5_8:
+  image: kitware/paraview-for-ci:v5.8.1
+  variables:
+    PARAVIEW_VERSION: "5.8.1"
+  rules:
+    - if: $DISABLE_5_8 == "True"
+      when: never
+    - if: $DISABLE_V581 == "True"
+      when: never
+    - when: on_success
+
+build_plugin_v5.8.1:
+  extends:
+    - .build_plugin
+    - .v5_8
+
+test_plugin_v5.8.1:
+  extends:
+    - .test_plugin
+    - .v5_8
+  dependencies:
+    - build_plugin_v5.8.1
+  needs:
+    - build_plugin_v5.8.1
