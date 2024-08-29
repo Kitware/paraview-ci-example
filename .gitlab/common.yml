@@ -1,0 +1,59 @@
+.build_binary_compatible:
+  stage: build
+  before_script:
+    - source /opt/rh/devtoolset-7/enable
+  script:
+      # This is needed because the build of ParaView use some absolute path
+    - ln -s /paraview/gitlab-kitware-sciviz-ci/ /builds/gitlab-kitware-sciviz-ci
+    - mkdir -p build
+    - cd build
+    - cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release ..
+    - cmake --build . --parallel 2
+  tags:
+    - docker
+    - linux-x86_64
+    - paraview
+  artifacts:
+    expire_in: 1h
+    when: always
+    paths:
+      - build/
+  rules:
+    - if: $DISABLE_BINARY == "True"
+      when: never
+    - when: on_success
+  interruptible: true
+
+.build_plugin:
+  stage: build
+  script:
+    - mkdir -p build
+    - cd build
+    - cmake -DCMAKE_PREFIX_PATH=/opt/paraview/install/ -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release ..
+    - cmake --build . --parallel 2
+  tags:
+    - docker
+    - linux-x86_64
+    - paraview
+  artifacts:
+    expire_in: 1h
+    when: always
+    paths:
+      - build/
+  interruptible: true
+
+.test_plugin:
+  stage: test
+  script:
+    - cd build
+    - xvfb-run ctest -j 2 --output-on-failure --no-tests=error || xvfb-run ctest -j 1 --rerun-failed --no-tests=error -VV
+  tags:
+    - docker
+    - linux-x86_64
+    - paraview
+  artifacts:
+    expire_in: 1h
+    when: always
+    paths:
+      - build/
+  interruptible: true
