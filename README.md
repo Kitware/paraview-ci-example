@@ -46,10 +46,15 @@ See [License.txt][] for details. For additional licenses, refer to the
 Technicalities
 ==============
 
-In the .github example, a CI matrix is used to build against different version of ParaView.
+In the GitHub example, a CI matrix is used to build against different version of ParaView.
 Feel free to modify the values in this matrix as you see fit.
 
-In the .gitlab example, jobs can be disabled using CI variables. eg: set `DISABLE_5_10` to `True`.
+In the GitHub example, the binary compatibility job cannot use gitub action from the marketplace
+as the docker container used is not compatible with node 20. Instead, we show how to upload using
+a dedicated REST API from data.kitware.com, you may want to use rewrite this action and upload
+to another server with a dedicated API, but you cannot use GitHub actions.
+
+In the GitLab example, jobs can be disabled using CI variables. eg: set `DISABLE_5_10` to `True`.
 This can be practical when sharing this file among multiples repositories.
 
 Pointing the .gitlab-ci.yml file directly in your gitlab repository CI settings is possible but it is highly recommended
