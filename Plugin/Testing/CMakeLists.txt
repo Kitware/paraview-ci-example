@@ -1,4 +1,5 @@
 if (TARGET ParaView::paraview)
+  # Note that there is an alternative baseline for ParaView 5.14 and above
   set (TestXML_USES_DIRECT_DATA ON)
   paraview_add_client_tests(
     LOAD_PLUGIN ElevationFilter

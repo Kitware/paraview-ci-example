@@ -5,6 +5,7 @@ find_package(ParaView REQUIRED)
 message(STATUS "ParaView found: ${ParaView_VERSION}")
 
 option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+set(DEFAULT_USE_SSIM_IMAGE_COMP ON)
 enable_testing()
 
 # Required for python testing  
