@@ -60,6 +60,11 @@ This can be practical when sharing this file among multiples repositories.
 Pointing the .gitlab-ci.yml file directly in your gitlab repository CI settings is possible but it is highly recommended
 to point to a specific commit version of the file and to not rely on the `main` branch to ensure continuity of CI.
 
+To run a gitlab CI pipeline, you need to make sure you have access to the [gitlab runners][] associated to the group where you created your repository. You can select which runner will be used by adding CI tags in the [common.yml][] file.
+
+[gitlab runners]: https://docs.gitlab.com/runner/
+[common.yml]: .gitlab/common.yml
+
 Deprecated Variables
 ====================
 
