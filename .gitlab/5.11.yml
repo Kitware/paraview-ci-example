@@ -11,6 +11,7 @@
 
 build_binary_compatible_5.11.2:
   extends:
+    - .binary_compatible_devtoolset7
     - .build_binary_compatible
     - .binary_5_11
 
