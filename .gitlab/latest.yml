@@ -32,5 +32,6 @@ test_plugin_latest:
 
 build_binary_compatible_latest:
   extends:
+    - .before_script_latest
     - .build_binary_compatible
     - .binary_latest

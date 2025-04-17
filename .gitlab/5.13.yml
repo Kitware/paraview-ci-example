@@ -9,6 +9,7 @@
 
 build_binary_compatible_5.13.3:
   extends:
+    - .before_script
     - .build_binary_compatible
     - .binary_5_13
 

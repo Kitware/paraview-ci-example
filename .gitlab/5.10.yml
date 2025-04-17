@@ -11,6 +11,7 @@
 
 build_binary_compatible_5.10.1:
   extends:
+    - .before_script
     - .build_binary_compatible
     - .binary_5_10
    

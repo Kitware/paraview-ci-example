@@ -1,7 +1,13 @@
-.build_binary_compatible:
-  stage: build
+.before_script:
   before_script:
     - source /opt/rh/devtoolset-7/enable
+
+.before_script_latest:
+  before_script:
+    - source /opt/rh/devtoolset-8/enable
+
+.build_binary_compatible:
+  stage: build
   script:
       # This is needed because the build of ParaView use some absolute path
     - ln -s /paraview/gitlab-kitware-sciviz-ci/ /builds/gitlab-kitware-sciviz-ci
