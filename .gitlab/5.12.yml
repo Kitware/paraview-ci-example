@@ -9,7 +9,7 @@
 
 build_binary_compatible_5.12.1:
   extends:
-    - .before_script
+    - .binary_compatible_devtoolset7
     - .build_binary_compatible
     - .binary_5_12
 
