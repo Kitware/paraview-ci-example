@@ -1,10 +1,10 @@
-.before_script:
-  before_script:
-    - source /opt/rh/devtoolset-7/enable
+.binary_compatible_gcc10:
+    variables:
+        LAUNCHER: "scl enable gcc-toolset-10 --"
 
-.before_script_latest:
-  before_script:
-    - scl enable gcc-toolset-10 bash
+.binary_compatible_devtoolset7:
+    variables:
+        LAUNCHER: "scl enable devtoolset-7 --"
 
 .build_binary_compatible:
   stage: build
@@ -13,9 +13,9 @@
     - ln -s /paraview/gitlab-kitware-sciviz-ci/ /builds/gitlab-kitware-sciviz-ci
     - mkdir -p build
     - cd build
-    - gcc --version
-    - cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release ..
-    - cmake --build . --parallel 2
+    - $LAUNCHER gcc --version
+    - $LAUNCHER cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release ..
+    - $LAUNCHER cmake --build . --parallel 2
   tags:
     - docker
     - linux-x86_64
