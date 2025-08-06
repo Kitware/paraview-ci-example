@@ -15,6 +15,7 @@ stages:
 include:
   - local: .gitlab/common.yml
   - local: .gitlab/latest.yml
+  - local: .gitlab/6.0.yml
   - local: .gitlab/5.13.yml
   - local: .gitlab/5.12.yml
   - local: .gitlab/5.11.yml
