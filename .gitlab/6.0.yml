@@ -1,0 +1,37 @@
+.binary_6.0:
+  image: kitware/paraview_org-plugin-devel:6.0.0
+  variables:
+    PARAVIEW_VERSION: "6.0.0"
+  rules:
+    - if: $DISABLE_6_0 == "True"
+      when: never
+    - when: on_success
+
+build_binary_compatible_6.0.0:
+  extends:
+    - .binary_compatible_gcc10
+    - .build_binary_compatible
+    - .binary_6.0
+
+.v6.0:
+  image: kitware/paraview-for-ci:v6.0.0
+  variables:
+    PARAVIEW_VERSION: "6.0.0"
+  rules:
+    - if: $DISABLE_6_0 == "True"
+      when: never
+    - when: on_success
+
+build_plugin_v6.0.0:
+  extends:
+    - .build_plugin
+    - .v6.0
+
+test_plugin_v6.0.0:
+  extends:
+    - .test_plugin
+    - .v6.0
+  dependencies:
+    - build_plugin_v6.0.0
+  needs:
+    - build_plugin_v6.0.0
