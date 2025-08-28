@@ -13,7 +13,7 @@ build_binary_compatible_6.0.0:
     - .build_binary_compatible
     - .binary_6.0
 
-.v6.0:
+.v6_0:
   image: kitware/paraview-for-ci:v6.0.0
   variables:
     PARAVIEW_VERSION: "6.0.0"
@@ -25,12 +25,12 @@ build_binary_compatible_6.0.0:
 build_plugin_v6.0.0:
   extends:
     - .build_plugin
-    - .v6.0
+    - .v6_0
 
 test_plugin_v6.0.0:
   extends:
     - .test_plugin
-    - .v6.0
+    - .v6_0
   dependencies:
     - build_plugin_v6.0.0
   needs:
