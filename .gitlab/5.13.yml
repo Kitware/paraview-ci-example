@@ -1,11 +1,13 @@
-.binary_5_13:
-  image: kitware/paraview_org-plugin-devel:5.13.3
-  variables:
-    PARAVIEW_VERSION: "5.13.3"
+.rules_5_13:
   rules:
     - if: $DISABLE_5_13 == "True"
       when: never
     - when: on_success
+
+.binary_5_13:
+  image: kitware/paraview_org-plugin-devel:5.13.3
+  variables:
+    PARAVIEW_VERSION: "5.13.3"
 
 build_binary_compatible_5.13.3:
   extends:
@@ -17,10 +19,6 @@ build_binary_compatible_5.13.3:
   image: kitware/paraview-for-ci:v5.13.3
   variables:
     PARAVIEW_VERSION: "5.13.3"
-  rules:
-    - if: $DISABLE_5_13 == "True"
-      when: never
-    - when: on_success
 
 build_plugin_v5.13.3:
   extends:

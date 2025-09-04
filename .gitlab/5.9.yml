@@ -1,13 +1,15 @@
-.v5_9:
-  image: kitware/paraview-for-ci:v5.9.1
-  variables:
-    PARAVIEW_VERSION: "5.9.1"
+.rules_5_9:
   rules:
     - if: $DISABLE_5_9 == "True"
       when: never
     - if: $DISABLE_V591 == "True"
       when: never
     - when: on_success
+
+.v5_9:
+  image: kitware/paraview-for-ci:v5.9.1
+  variables:
+    PARAVIEW_VERSION: "5.9.1"
 
 build_plugin_v5.9.1:
   extends:

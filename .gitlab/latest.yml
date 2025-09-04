@@ -1,11 +1,13 @@
-.latest:
-  image: kitware/paraview-for-ci:latest
-  variables:
-    PARAVIEW_VERSION: "latest"
+.rules_latest:
   rules:
     - if: $DISABLE_LATEST == "True"
       when: never
     - when: on_success
+
+.latest:
+  image: kitware/paraview-for-ci:latest
+  variables:
+    PARAVIEW_VERSION: "latest"
 
 build_plugin_latest:
   extends:
