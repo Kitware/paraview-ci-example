@@ -17,7 +17,6 @@ build_binary_compatible_5.10.1:
     - .binary_5_10
     - .build_binary_compatible
   rules:
-    - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_5_10", "rules"]
 
 .v5_10:
