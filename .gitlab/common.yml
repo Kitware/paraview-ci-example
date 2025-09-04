@@ -10,7 +10,6 @@
   rules:
     - if: $DISABLE_BINARY == "True"
       when: never
-    - when: on_success
 
 .build_binary_compatible:
   stage: build

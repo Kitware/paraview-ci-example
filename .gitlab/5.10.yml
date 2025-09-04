@@ -4,7 +4,6 @@
       when: never
     - if: $DISABLE_V5101 == "True"
       when: never
-    - when: on_success
 
 .binary_5_10:
   image: kitware/paraview_org-plugin-devel:5.10.1
@@ -19,6 +18,7 @@ build_binary_compatible_5.10.1:
   rules:
     - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_5_10", "rules"]
+    - when: on_success
 
 .v5_10:
   image: kitware/paraview-for-ci:v5.10.1
@@ -28,15 +28,19 @@ build_binary_compatible_5.10.1:
 build_plugin_v5.10.1:
   extends:
     - .v5_10
-    - .rules_5_10
     - .build_plugin
+  rules:
+    - !reference [".rules_5_10", "rules"]
+    - when: on_success
 
 test_plugin_v5.10.1:
   extends:
     - .v5_10
-    - .rules_5_10
     - .test_plugin
   dependencies:
     - build_plugin_v5.10.1
   needs:
     - build_plugin_v5.10.1
+  rules:
+    - !reference [".rules_5_10", "rules"]
+    - when: on_success

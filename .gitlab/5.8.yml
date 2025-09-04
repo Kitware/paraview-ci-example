@@ -4,7 +4,6 @@
       when: never
     - if: $DISABLE_V581 == "True"
       when: never
-    - when: on_success
 
 .v5_8:
   image: kitware/paraview-for-ci:v5.8.1
@@ -13,8 +12,11 @@
 
 build_plugin_v5.8.1:
   extends:
-    - .build_plugin
     - .v5_8
+    - .build_plugin
+  rules:
+    - !reference [".rules_5_8", "rules"]
+    - when: on_success
 
 test_plugin_v5.8.1:
   extends:
@@ -24,3 +26,6 @@ test_plugin_v5.8.1:
     - build_plugin_v5.8.1
   needs:
     - build_plugin_v5.8.1
+  rules:
+    - !reference [".rules_5_8", "rules"]
+    - when: on_success
