@@ -6,6 +6,11 @@
     variables:
         LAUNCHER: "scl enable devtoolset-7 --"
 
+.rules_binary_compatible:        
+  rules:
+    - if: $DISABLE_BINARY == "True"
+      when: never
+
 .build_binary_compatible:
   stage: build
   script:
@@ -24,10 +29,6 @@
     when: always
     paths:
       - build/
-  rules:
-    - if: $DISABLE_BINARY == "True"
-      when: never
-    - when: on_success
   interruptible: true
 
 .build_plugin:

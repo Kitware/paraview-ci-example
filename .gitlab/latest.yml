@@ -1,37 +1,44 @@
+.rules_latest:
+  rules:
+    - if: $DISABLE_LATEST == "True"
+      when: never
+
 .latest:
   image: kitware/paraview-for-ci:latest
   variables:
     PARAVIEW_VERSION: "latest"
-  rules:
-    - if: $DISABLE_LATEST == "True"
-      when: never
-    - when: on_success
-
-build_plugin_latest:
-  extends:
-    - .build_plugin
-    - .latest
-
-test_plugin_latest:
-  extends:
-    - .test_plugin
-    - .latest
-  dependencies:
-    - build_plugin_latest
-  needs:
-    - build_plugin_latest
 
 .binary_latest:
   image: kitware/paraview_org-plugin-devel:latest
   variables:
     PARAVIEW_VERSION: "latest"
-  rules:
-    - if: $DISABLE_LATEST == "True"
-      when: never
-    - when: on_success
 
 build_binary_compatible_latest:
   extends:
     - .binary_compatible_gcc10
-    - .build_binary_compatible
     - .binary_latest
+    - .build_binary_compatible
+  rules:
+    - !reference [".rules_binary_compatible", "rules"]
+    - !reference [".rules_latest", "rules"]
+    - when: on_success
+
+build_plugin_latest:
+  extends:
+    - .latest
+    - .build_plugin
+  rules:
+    - !reference [".rules_latest", "rules"]
+    - when: on_success
+
+test_plugin_latest:
+  extends:
+    - .latest
+    - .test_plugin
+  dependencies:
+    - build_plugin_latest
+  needs:
+    - build_plugin_latest
+  rules:
+    - !reference [".rules_latest", "rules"]
+    - when: on_success
