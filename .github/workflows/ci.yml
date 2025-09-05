@@ -59,7 +59,7 @@ jobs:
       run: echo "LAUNCHER=scl enable devtoolset-7 --" >> $GITHUB_ENV
 
     - name: Set scl launcher latest
-      if: matrix.version == 'latest' || matrix.version != '6.0.0'
+      if: matrix.version == 'latest' || matrix.version == '6.0.0'
       shell: bash
       run: echo "LAUNCHER=scl enable gcc-toolset-10 --" >> $GITHUB_ENV
 
