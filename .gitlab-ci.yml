@@ -23,3 +23,6 @@ include:
   - local: .gitlab/5.10.yml
   - local: .gitlab/5.9.yml
   - local: .gitlab/5.8.yml
+  - local: .gitlab/windows_common.yml
+  - local: .gitlab/windows_6.1.yml
+  - local: .gitlab/windows_6.0.yml

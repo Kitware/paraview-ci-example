@@ -1,0 +1,17 @@
+.rules_6_1:
+  rules:
+    - if: '$DISABLE_6_1 == "True"'
+      when: never
+
+.v6_1:
+  variables: 
+    PARAVIEW_VERSION: "6.1.1"
+
+build_and_test_v6_1_1:
+  extends:
+    - .v6_1
+    - .windows_image
+    - .build_and_test_binary_compatible
+  rules:
+    - !reference [".rules_6_1", "rules"]
+    - when: on_success
