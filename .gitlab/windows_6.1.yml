@@ -7,7 +7,7 @@
   variables: 
     PARAVIEW_VERSION: "6.1.1"
 
-build_and_test_v6_1_1:
+build_and_test_win64_v6.1.1:
   extends:
     - .v6_1
     - .windows_image
