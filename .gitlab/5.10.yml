@@ -10,37 +10,12 @@
   variables:
     PARAVIEW_VERSION: "5.10.1"
 
-build_binary_compatible_5.10.1:
+build_and_test_binary_compatible_5.10.1:
   extends:
     - .binary_compatible_devtoolset7
     - .binary_5_10
-    - .build_binary_compatible
+    - .build_and_test_binary_compatible
   rules:
     - !reference [".rules_binary_compatible", "rules"]
-    - !reference [".rules_5_10", "rules"]
-    - when: on_success
-
-.v5_10:
-  image: kitware/paraview-for-ci:v5.10.1
-  variables:
-    PARAVIEW_VERSION: "5.10.1"
-
-build_plugin_v5.10.1:
-  extends:
-    - .v5_10
-    - .build_plugin
-  rules:
-    - !reference [".rules_5_10", "rules"]
-    - when: on_success
-
-test_plugin_v5.10.1:
-  extends:
-    - .v5_10
-    - .test_plugin
-  dependencies:
-    - build_plugin_v5.10.1
-  needs:
-    - build_plugin_v5.10.1
-  rules:
     - !reference [".rules_5_10", "rules"]
     - when: on_success
