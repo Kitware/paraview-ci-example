@@ -16,7 +16,7 @@
 .build_and_test_binary_compatible:
   stage: build
   script:
-    - source /etc/os-release; if [[ "$VERSION" == "7 (Core)" ]]; then sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo; sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo; sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/CentOS-*.repo; yum clean all; yum --disablerepo=ius makecache; yum --disablerepo=ius -y install xorg-x11-server-Xvfb; else yum -y install xorg-x11-server-Xvfb; fi
+    - bash -c 'source /etc/os-release; if [[ "$VERSION" == "7 (Core)" ]]; then sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/CentOS-*.repo; sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/CentOS-*.repo; sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/CentOS-*.repo; yum clean all; yum --disablerepo=ius makecache; yum --disablerepo=ius -y install xorg-x11-server-Xvfb; else yum -y install xorg-x11-server-Xvfb; fi'
     - yum -y install xorg-x11-server-Xvfb
       # This is needed because the build of ParaView use some absolute path
     - ln -s /paraview/gitlab-kitware-sciviz-ci/ /builds/gitlab-kitware-sciviz-ci
