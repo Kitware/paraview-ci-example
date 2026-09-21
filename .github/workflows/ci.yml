@@ -64,12 +64,12 @@ jobs:
       run: echo "LAUNCHER=scl enable gcc-toolset-10 --" >> $GITHUB_ENV
 
     - name: Install testing deps Centos 8
-      if: maxtrix.version == latest || matrix.version == '6.0.1' || matrix.version == '6.1.1'
+      if: matrix.version == 'latest' || matrix.version == '6.0.1' || matrix.version == '6.1.1'
       shell: bash
       run: yum -y install xorg-x11-server-Xvfb
 
     - name: Install testing deps Centos 7
-      if: maxtrix.version != latest && matrix.version != '6.0.1' && matrix.version != '6.1.1'
+      if: matrix.version != 'latest' && matrix.version != '6.0.1' && matrix.version != '6.1.1'
       shell: bash
       run: sed -i 's|mirror.centos.org|archive.kernel.org/centos-vault|g' /etc/yum.repos.d/*.repo; sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo; sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo; sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*; sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://archive.kernel.org/centos-vault|g' /etc/yum.repos.d/CentOS-*; yum clean all; yum --disablerepo=ius makecache; yum --disablerepo=ius -y install xorg-x11-server-Xvfb xcb-util-keysyms xcb-util-wm xcb-util-cursor libgfortran5
 
