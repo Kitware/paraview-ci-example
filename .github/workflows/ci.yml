@@ -73,6 +73,10 @@ jobs:
       shell: bash
       run: sed -i 's|mirror.centos.org|archive.kernel.org/centos-vault|g' /etc/yum.repos.d/*.repo; sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo; sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo; sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*; sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://archive.kernel.org/centos-vault|g' /etc/yum.repos.d/CentOS-*; yum clean all; yum --disablerepo=ius makecache; yum --disablerepo=ius -y install xorg-x11-server-Xvfb xcb-util-keysyms xcb-util-wm xcb-util-cursor libgfortran5
 
+    - name: Set LD_LIBRARY_PATH for qt6
+      shell: bash
+      run: if [ -d  "/.gitlab/qt6/lib/" ]; then echo "LD_LIBRARY_PATH=/.gitlab/qt6/lib/" >> $GITHUB_ENV; fi
+
     - name: Manual Checkout
       working-directory: ${{github.workspace}}
       run: git clone https://github.com/${{github.repository}} source
