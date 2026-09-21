@@ -8,84 +8,105 @@ on:
       - main
 
 jobs:
-  build_and_test:
-    if: github.event.pull_request.draft == false
+    build_binary_compatible_win:
+      if: github.event.pull_request.draft == false
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: [ v5.8.1, v5.9.1, v5.10.1, v5.11.2, v5.12.1, v5.13.3, v6.0.1, v6.1.1, latest ]
-    container: kitware/paraview-for-ci:${{ matrix.version }}
+      runs-on: windows-2025
+      strategy:
+        matrix:
+          version: [v6.0.1, v6.1.1]
+      container: kitware/paraview-for-ci:windows-pvsb-${{ matrix.version }}
 
-    steps:
+      steps:
 
-    - name: Checkout
-      uses: actions/checkout@v6
-      with:
-        path: 'source'
-        fetch-depth: 0
-        lfs: 'false'
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          path: 'source'
+          fetch-depth: 0
+          lfs: 'false'
 
-    - name: Setup Directories
-      working-directory: ${{github.workspace}}
-      run: mkdir build
+      - name: Test windows CI
+        run: function Invoke-BatchFile { param([string]$Path, [string]$Parameters); $tempFile = [IO.Path]::GetTempFileName(); cmd.exe /c " `"$Path`" $Parameters && set > `"$tempFile`" "; Get-Content $tempFile | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }; Remove-Item $tempFile }; Invoke-BatchFile "C:\Program Files (x86)\Microsoft Visual Studio\BuildTools\VC\Auxiliary\Build\vcvars64.bat"; mkdir build; cd build; cmake -DCMAKE_PREFIX_PATH=/opt/paraview/install/ -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release ../source; ninja; ctest -j 1 -VV
+    
+  # build_and_test:
+  #   if: github.event.pull_request.draft == false
 
-    - name: Configure
-      working-directory: ${{github.workspace}}/build
-      run: cmake -DCMAKE_PREFIX_PATH=/opt/paraview/install/ -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release ../source
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       version: [ v5.8.1, v5.9.1, v5.10.1, v5.11.2, v5.12.1, v5.13.3, v6.0.1, v6.1.1, latest ]
+  #   container: kitware/paraview-for-ci:${{ matrix.version }}
 
-    - name: Build
-      working-directory: ${{github.workspace}}/build
-      run: cmake --build . --parallel 2
+  #   steps:
 
-    - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: xvfb-run ctest -j 2 --output-on-failure || ctest -j 1 --rerun-failed -VV
+  #   - name: Checkout
+  #     uses: actions/checkout@v6
+  #     with:
+  #       path: 'source'
+  #       fetch-depth: 0
+  #       lfs: 'false'
 
-  build_binary_compatible:
-    if: github.event.pull_request.draft == false
+  #   - name: Setup Directories
+  #     working-directory: ${{github.workspace}}
+  #     run: mkdir build
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: [ 5.10.1, 5.11.2, 5.12.1, 5.13.3, 6.0.1, 6.1.1, latest ]
-    container: kitware/paraview_org-plugin-devel:${{ matrix.version }}
+  #   - name: Configure
+  #     working-directory: ${{github.workspace}}/build
+  #     run: cmake -DCMAKE_PREFIX_PATH=/opt/paraview/install/ -DBUILD_TESTING=ON -DCMAKE_BUILD_TYPE=Release ../source
 
-    steps:
+  #   - name: Build
+  #     working-directory: ${{github.workspace}}/build
+  #     run: cmake --build . --parallel 2
 
-    - name: Set scl launcher
-      if: matrix.version != 'latest' && matrix.version != '6.0.1' && matrix.version != '6.1.1'
-      shell: bash
-      run: echo "LAUNCHER=scl enable devtoolset-7 --" >> $GITHUB_ENV
+  #   - name: Test
+  #     working-directory: ${{github.workspace}}/build
+  #     run: xvfb-run ctest -j 2 --output-on-failure || ctest -j 1 --rerun-failed -VV
 
-    - name: Set scl launcher latest
-      if: matrix.version == 'latest' || matrix.version == '6.0.1' || matrix.version == '6.1.1'
-      shell: bash
-      run: echo "LAUNCHER=scl enable gcc-toolset-10 --" >> $GITHUB_ENV
+  # build_binary_compatible:
+  #   if: github.event.pull_request.draft == false
 
-    - name: Manual Checkout
-      working-directory: ${{github.workspace}}
-      run: git clone https://github.com/${{github.repository}} source
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       version: [ 5.10.1, 5.11.2, 5.12.1, 5.13.3, 6.0.1, 6.1.1, latest ]
+  #   container: kitware/paraview_org-plugin-devel:${{ matrix.version }}
 
-    - name: Setup Directories
-      working-directory: ${{github.workspace}}
-      run: mkdir build
+  #   steps:
 
-    - name: Configure
-      working-directory: ${{github.workspace}}/build
-      run: ${{ env.LAUNCHER }} cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release ../source
+  #   - name: Set scl launcher
+  #     if: matrix.version != 'latest' && matrix.version != '6.0.1' && matrix.version != '6.1.1'
+  #     shell: bash
+  #     run: echo "LAUNCHER=scl enable devtoolset-7 --" >> $GITHUB_ENV
 
-    - name: Build
-      working-directory: ${{github.workspace}}/build
-      run: ${{ env.LAUNCHER }} cmake --build . --parallel 2
+  #   - name: Set scl launcher latest
+  #     if: matrix.version == 'latest' || matrix.version == '6.0.1' || matrix.version == '6.1.1'
+  #     shell: bash
+  #     run: echo "LAUNCHER=scl enable gcc-toolset-10 --" >> $GITHUB_ENV
 
-    - name: Manual Upload Example # Replace with your own upload step
-      if: github.ref == 'refs/heads/main'
-      working-directory: ${{github.workspace}}
-      env:
-        DATA_TOKEN: ${{ secrets.DATA_TOKEN }}
-      run: |
-        zip -r artifacts.zip ./build
-        FILESIZE=`stat -c %s artifacts.zip`
-        TOKEN=`curl -X POST "https://data.kitware.com/api/v1/api_key/token?key=$DATA_TOKEN" -d "" | grep -oP '"token":\s*"\K[a-zA-Z0-9]*'`
-        curl -X POST "https://data.kitware.com/api/v1/file?parentId=5a4f9fa08d777f5e872f8103&name=artifacts.zip&parentType=folder&size=$FILESIZE&mimeType=application/zip" --data-binary "@./artifacts.zip" --header "Girder-Token: $TOKEN" -v --header "Content-Type: application/zip"
+  #   - name: Manual Checkout
+  #     working-directory: ${{github.workspace}}
+  #     run: git clone https://github.com/${{github.repository}} source
+
+  #   - name: Setup Directories
+  #     working-directory: ${{github.workspace}}
+  #     run: mkdir build
+
+  #   - name: Configure
+  #     working-directory: ${{github.workspace}}/build
+  #     run: ${{ env.LAUNCHER }} cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release ../source
+
+  #   - name: Build
+  #     working-directory: ${{github.workspace}}/build
+  #     run: ${{ env.LAUNCHER }} cmake --build . --parallel 2
+
+  #   - name: Manual Upload Example # Replace with your own upload step
+  #     if: github.ref == 'refs/heads/main'
+  #     working-directory: ${{github.workspace}}
+  #     env:
+  #       DATA_TOKEN: ${{ secrets.DATA_TOKEN }}
+  #     run: |
+  #       zip -r artifacts.zip ./build
+  #       FILESIZE=`stat -c %s artifacts.zip`
+  #       TOKEN=`curl -X POST "https://data.kitware.com/api/v1/api_key/token?key=$DATA_TOKEN" -d "" | grep -oP '"token":\s*"\K[a-zA-Z0-9]*'`
+  #       curl -X POST "https://data.kitware.com/api/v1/file?parentId=5a4f9fa08d777f5e872f8103&name=artifacts.zip&parentType=folder&size=$FILESIZE&mimeType=application/zip" --data-binary "@./artifacts.zip" --header "Girder-Token: $TOKEN" -v --header "Content-Type: application/zip"
