@@ -42,7 +42,7 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: xvfb-run ctest -j 2 --output-on-failure || ctest -j 1 --rerun-failed -VV
 
-  build_and_test_binary_compatible:
+  build_binary_compatible:
     if: github.event.pull_request.draft == false
 
     runs-on: ubuntu-latest
