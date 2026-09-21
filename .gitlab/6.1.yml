@@ -18,27 +18,15 @@ build_binary_compatible_6.1.1:
     - !reference [".rules_6_1", "rules"]
     - when: on_success
 
-.v6_1:
-  image: kitware/paraview-for-ci:v6.1.1
-  variables:
-    PARAVIEW_VERSION: "6.1.1"
-
-build_plugin_v6.1.1:
+test_binary_compatible_6.1.1:
   extends:
-    - .v6_1
-    - .build_plugin
-  rules:
-    - !reference [".rules_6_1", "rules"]
-    - when: on_success
-
-test_plugin_v6.1.1:
-  extends:
-    - .v6_1
-    - .test_plugin
+    - .test_binary_compatible
+    - .binary_6_1
   dependencies:
-    - build_plugin_v6.1.1
+    - build_binary_compatible_6.1.1
   needs:
-    - build_plugin_v6.1.1
+    - build_binary_compatible_6.1.1
   rules:
+    - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_6_1", "rules"]
     - when: on_success

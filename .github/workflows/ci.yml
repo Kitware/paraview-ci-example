@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [ v5.8.1, v5.9.1, v5.10.1, v5.11.2, v5.12.1, v5.13.3, v6.0.1, v6.1.1, latest ]
+        version: [ v5.8.1, v5.9.1 ]
     container: kitware/paraview-for-ci:${{ matrix.version }}
 
     steps:
@@ -42,7 +42,7 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: xvfb-run ctest -j 2 --output-on-failure || ctest -j 1 --rerun-failed -VV
 
-  build_binary_compatible:
+  build_and_test_binary_compatible:
     if: github.event.pull_request.draft == false
 
     runs-on: ubuntu-latest
@@ -63,6 +63,20 @@ jobs:
       shell: bash
       run: echo "LAUNCHER=scl enable gcc-toolset-10 --" >> $GITHUB_ENV
 
+    - name: Install testing deps Centos 8
+      if: matrix.version == 'latest' || matrix.version == '6.0.1' || matrix.version == '6.1.1'
+      shell: bash
+      run: yum -y install xorg-x11-server-Xvfb
+
+    - name: Install testing deps Centos 7
+      if: matrix.version != 'latest' && matrix.version != '6.0.1' && matrix.version != '6.1.1'
+      shell: bash
+      run: sed -i 's|mirror.centos.org|archive.kernel.org/centos-vault|g' /etc/yum.repos.d/*.repo; sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo; sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo; sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*; sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://archive.kernel.org/centos-vault|g' /etc/yum.repos.d/CentOS-*; yum clean all; yum --disablerepo=ius makecache; yum --disablerepo=ius -y install xorg-x11-server-Xvfb xcb-util-keysyms xcb-util-wm xcb-util-cursor libgfortran5
+
+    - name: Set LD_LIBRARY_PATH for qt6
+      shell: bash
+      run: if [ -d  "/.gitlab/qt6/lib/" ]; then echo "LD_LIBRARY_PATH=/.gitlab/qt6/lib/" >> $GITHUB_ENV; fi
+
     - name: Manual Checkout
       working-directory: ${{github.workspace}}
       run: git clone https://github.com/${{github.repository}} source
@@ -73,11 +87,15 @@ jobs:
 
     - name: Configure
       working-directory: ${{github.workspace}}/build
-      run: ${{ env.LAUNCHER }} cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release ../source
+      run: ${{ env.LAUNCHER }} cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ../source
 
     - name: Build
       working-directory: ${{github.workspace}}/build
       run: ${{ env.LAUNCHER }} cmake --build . --parallel 2
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: xvfb-run -s "-screen 0 640x480x24" ctest -j 2 --output-on-failure --no-tests=error || xvfb-run -s "-screen 0 640x480x24" ctest -j 1 --rerun-failed --no-tests=error -VV
 
     - name: Manual Upload Example # Replace with your own upload step
       if: github.ref == 'refs/heads/main'

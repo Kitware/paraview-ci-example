@@ -18,8 +18,27 @@
     - ln -s /paraview/gitlab-kitware-sciviz-ci/ /builds/gitlab-kitware-sciviz-ci
     - mkdir -p build
     - cd build
-    - $LAUNCHER cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release ..
+    - $LAUNCHER cmake -DCMAKE_PREFIX_PATH=/builds/gitlab-kitware-sciviz-ci/build/install/ -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..
     - $LAUNCHER cmake --build . --parallel 2
+  tags:
+    - docker
+    - linux-x86_64
+    - paraview
+  artifacts:
+    expire_in: 1h
+    when: always
+    paths:
+      - build/
+  interruptible: true
+
+.test_binary_compatible:
+  stage: test
+  before_script:
+    - source /etc/os-release; if [[ "$VERSION" == "7 (Core)" ]]; then sed -i 's|mirror.centos.org|archive.kernel.org/centos-vault|g' /etc/yum.repos.d/*.repo; sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo; sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo; sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*; sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://archive.kernel.org/centos-vault|g' /etc/yum.repos.d/CentOS-*; yum clean all; yum --disablerepo=ius makecache; yum --disablerepo=ius -y install xorg-x11-server-Xvfb xcb-util-keysyms xcb-util-wm xcb-util-cursor libgfortran5; else yum -y install xorg-x11-server-Xvfb; fi
+    - if [ -d  "/.gitlab/qt6/lib/" ]; then export LD_LIBRARY_PATH="/.gitlab/qt6/lib/"; fi
+  script:
+    - cd build
+    - xvfb-run -s "-screen 0 640x480x24" ctest -j 2 --output-on-failure --no-tests=error || xvfb-run -s "-screen 0 640x480x24" ctest -j 1 --rerun-failed --no-tests=error -VV
   tags:
     - docker
     - linux-x86_64
