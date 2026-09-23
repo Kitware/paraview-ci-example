@@ -97,4 +97,4 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: xvfb-run -s "-screen 0 640x480x24" ctest -j 2 --output-on-failure --no-tests=error || xvfb-run -s "-screen 0 640x480x24" ctest -j 1 --rerun-failed --no-tests=error -VV
 
-    # uploading artifacts step is done here. Upload directory is ./build/
+    # You should upload artifacts here, the plugin is contained in ./build/
