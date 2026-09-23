@@ -98,7 +98,7 @@ jobs:
       run: xvfb-run -s "-screen 0 640x480x24" ctest -j 2 --output-on-failure --no-tests=error || xvfb-run -s "-screen 0 640x480x24" ctest -j 1 --rerun-failed --no-tests=error -VV
 
     - name: Manual Upload Example # Replace with your own upload step
-      if: github.ref == 'refs/heads/main'
+      #if: github.ref == 'refs/heads/main'
       working-directory: ${{github.workspace}}
       env:
         DATA_TOKEN: ${{ secrets.DATA_TOKEN }}
