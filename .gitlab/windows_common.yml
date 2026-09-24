@@ -6,11 +6,13 @@
 .build_binary_compatible_win64: 
   before_script:
     - function Invoke-BatchFile { param([string]$Path, [string]$Parameters); $tempFile = [IO.Path]::GetTempFileName(); cmd.exe /c " `"$Path`" $Parameters && set > `"$tempFile`" "; Get-Content $tempFile | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }; Remove-Item $tempFile }; Invoke-BatchFile "C:\Program Files (x86)\Microsoft Visual Studio\BuildTools\VC\Auxiliary\Build\vcvars64.bat" 
+    - mkdir C:\builds\paraview-ci\build\
+    - New-Item -Path C:\builds\paraview-ci\build\install -ItemType SymbolicLink -Value C:\pv\build\install
   stage: build
   script: 
     - mkdir build
     - cd build
-    - cmake -G Ninja -DCMAKE_PREFIX_PATH=C:\pv\build\install\ -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..\
+    - cmake -G Ninja -DCMAKE_PREFIX_PATH=C:\builds\paraview-ci\build\install -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..\
     - ninja
   artifacts:
     expire_in: 1h
@@ -25,6 +27,8 @@
 .test_binary_compatible_win64:
   before_script:
     - function Invoke-BatchFile { param([string]$Path, [string]$Parameters); $tempFile = [IO.Path]::GetTempFileName(); cmd.exe /c " `"$Path`" $Parameters && set > `"$tempFile`" "; Get-Content $tempFile | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }; Remove-Item $tempFile }; Invoke-BatchFile "C:\Program Files (x86)\Microsoft Visual Studio\BuildTools\VC\Auxiliary\Build\vcvars64.bat" 
+    - mkdir C:\builds\paraview-ci\build\
+    - New-Item -Path C:\builds\paraview-ci\build\install -ItemType SymbolicLink -Value C:\pv\build\install
   stage: test
   script:
     - cd build
