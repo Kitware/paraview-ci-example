@@ -1,0 +1,30 @@
+.rules_latest:
+  rules:
+    - if: '$DISABLE_LATEST == "True"'
+      when: never
+
+.latest_win:
+  variables: 
+    PARAVIEW_VERSION: "latest"
+
+build_binary_compatible_win64_latest:
+  extends:
+    - .latest_win
+    - .windows_image
+    - .build_binary_compatible_win64
+  rules:
+    - !reference [".rules_latest", "rules"]
+    - when: on_success
+
+test_binary_compatible_win64_latest:
+  extends:
+    - .latest_win
+    - .windows_image
+    - .test_binary_compatible_win64
+  dependencies:
+    - build_binary_compatible_win64_latest
+  needs:
+    - build_binary_compatible_win64_latest
+  rules:
+    - !reference [".rules_latest", "rules"]
+    - when: on_success
