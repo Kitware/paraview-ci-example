@@ -1,8 +1,3 @@
-.rules_6_1:
-  rules:
-    - if: $DISABLE_6_1 == "True"
-      when: never
-
 .binary_6_1:
   image: kitware/paraview_org-plugin-devel:6.1.1
   variables:
@@ -16,6 +11,7 @@ build_binary_compatible_6.1.1:
   rules:
     - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_6_1", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
 
 test_binary_compatible_6.1.1:
@@ -29,4 +25,5 @@ test_binary_compatible_6.1.1:
   rules:
     - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_6_1", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success

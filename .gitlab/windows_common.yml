@@ -1,0 +1,46 @@
+.windows_image:
+  image: 
+    name: kitware/paraview_org-plugin-devel-win:$PARAVIEW_VERSION
+    entrypoint: ["powershell.exe"]
+
+.before_script_windows: &before_script_windows
+    # Activates vcvarsall
+    - function Invoke-BatchFile { param([string]$Path, [string]$Parameters); $tempFile = [IO.Path]::GetTempFileName(); cmd.exe /c " `"$Path`" $Parameters && set > `"$tempFile`" "; Get-Content $tempFile | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }; Remove-Item $tempFile }; Invoke-BatchFile "C:\Program Files (x86)\Microsoft Visual Studio\BuildTools\VC\Auxiliary\Build\vcvars64.bat" 
+    # Creates a symlink as in the linux CI, the build of ParaView use some absolute path. Testing for existence is required due to caching of C:\builds which can be preserved accross jobs, though the behaviour is eratic.
+    - if(!(Test-Path -Path C:\builds\paraview-ci\build\install)) { mkdir C:\builds\paraview-ci\build\; New-Item -Path C:\builds\paraview-ci\build\install -ItemType SymbolicLink -Value C:\pv\build\install } else { echo "Directory exists maybe due to caching..." } 
+
+.build_binary_compatible_win64: 
+  before_script:
+    - *before_script_windows
+  stage: build
+  script: 
+    - mkdir build
+    - cd build
+    - cmake -G Ninja -DCMAKE_PREFIX_PATH=C:\builds\paraview-ci\build\install -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..\
+    - ninja
+  artifacts:
+    expire_in: 1h
+    when: always
+    paths:
+      - build\
+  tags:
+    - docker
+    - windows-x86_64
+    - paraview
+
+.test_binary_compatible_win64:
+  before_script:
+    - *before_script_windows
+  stage: test
+  script:
+    - cd build
+    - ctest -j 2 -VV
+  artifacts:
+    expire_in: 1h
+    when: always
+    paths:
+      - build\
+  tags:
+    - docker
+    - windows-x86_64
+    - paraview

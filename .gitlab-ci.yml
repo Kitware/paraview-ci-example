@@ -13,7 +13,8 @@ stages:
   - test
 
 include:
-  - local: .gitlab/common.yml
+  - local: .gitlab/rules.yml
+  - local: .gitlab/linux_common.yml
   - local: .gitlab/latest.yml
   - local: .gitlab/6.1.yml
   - local: .gitlab/6.0.yml
@@ -23,3 +24,7 @@ include:
   - local: .gitlab/5.10.yml
   - local: .gitlab/5.9.yml
   - local: .gitlab/5.8.yml
+  - local: .gitlab/windows_common.yml
+  - local: .gitlab/windows_latest.yml
+  - local: .gitlab/windows_6.1.yml
+  - local: .gitlab/windows_6.0.yml

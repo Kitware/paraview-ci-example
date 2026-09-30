@@ -1,10 +1,3 @@
-.rules_5_9:
-  rules:
-    - if: $DISABLE_5_9 == "True"
-      when: never
-    - if: $DISABLE_V591 == "True"
-      when: never
-
 .v5_9:
   image: kitware/paraview-for-ci:v5.9.1
   variables:
@@ -16,6 +9,7 @@ build_plugin_v5.9.1:
     - .v5_9
   rules:
     - !reference [".rules_5_9", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
 
 test_plugin_v5.9.1:
@@ -28,4 +22,5 @@ test_plugin_v5.9.1:
     - build_plugin_v5.9.1
   rules:
     - !reference [".rules_5_9", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success

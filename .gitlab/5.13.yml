@@ -1,9 +1,3 @@
-.rules_5_13:
-  rules:
-    - if: $DISABLE_5_13 == "True"
-      when: never
-    - when: on_success
-
 .binary_5_13:
   image: kitware/paraview_org-plugin-devel:5.13.3
   variables:
@@ -17,6 +11,7 @@ build_binary_compatible_5.13.3:
   rules:
     - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_5_13", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
 
 test_binary_compatible_5.13.3:
@@ -30,4 +25,5 @@ test_binary_compatible_5.13.3:
   rules:
     - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_5_13", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
