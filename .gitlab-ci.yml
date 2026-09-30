@@ -13,7 +13,7 @@ stages:
   - test
 
 include:
-  - local: .gitlab/common_rules.yml
+  - local: .gitlab/rules.yml
   - local: .gitlab/linux_common.yml
   - local: .gitlab/latest.yml
   - local: .gitlab/6.1.yml

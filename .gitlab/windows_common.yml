@@ -1,8 +1,3 @@
-.rules_windows:
-  rules:
-    - if: '$DISABLE_WINDOWS == "True"'
-      when: never
-
 .windows_image:
   image: 
     name: kitware/paraview_org-plugin-devel-win:$PARAVIEW_VERSION

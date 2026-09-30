@@ -1,3 +1,13 @@
+.rules_linux:
+  rules:
+    - if: '$DISABLE_LINUX == "True"'
+      when: never
+
+.rules_windows:
+  rules:
+    - if: '$DISABLE_WINDOWS == "True"'
+      when: never
+
 .rules_binary_compatible:        
   rules:
     - if: $DISABLE_BINARY == "True"
