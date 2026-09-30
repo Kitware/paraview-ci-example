@@ -1,10 +1,3 @@
-.rules_5_8:
-  rules:
-    - if: $DISABLE_5_8 == "True"
-      when: never
-    - if: $DISABLE_V581 == "True"
-      when: never
-
 .v5_8:
   image: kitware/paraview-for-ci:v5.8.1
   variables:

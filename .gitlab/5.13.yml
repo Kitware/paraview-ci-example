@@ -1,9 +1,3 @@
-.rules_5_13:
-  rules:
-    - if: $DISABLE_5_13 == "True"
-      when: never
-    - when: on_success
-
 .binary_5_13:
   image: kitware/paraview_org-plugin-devel:5.13.3
   variables:

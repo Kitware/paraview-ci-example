@@ -1,3 +1,8 @@
+.rules_windows:
+  rules:
+    - if: '$DISABLE_WINDOWS == "True"'
+      when: never
+
 .windows_image:
   image: 
     name: kitware/paraview_org-plugin-devel-win:$PARAVIEW_VERSION
@@ -23,6 +28,9 @@
     - docker
     - windows-x86_64
     - paraview
+  rules:
+    - !reference [".rules_windows", "rules"]
+    - !reference [".rules_binary_compatible", "rules"]
 
 .test_binary_compatible_win64:
   before_script:
@@ -42,3 +50,6 @@
     - docker
     - windows-x86_64
     - paraview
+  rules:
+    - !reference [".rules_windows", "rules"]
+    - !reference [".rules_binary_compatible", "rules"]

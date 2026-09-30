@@ -1,8 +1,3 @@
-.rules_latest:
-  rules:
-    - if: $DISABLE_LATEST == "True"
-      when: never
-
 .latest:
   image: kitware/paraview-for-ci:latest
   variables:

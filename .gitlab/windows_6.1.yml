@@ -1,8 +1,3 @@
-.rules_6_1:
-  rules:
-    - if: '$DISABLE_6_1 == "True"'
-      when: never
-
 .v6_1:
   variables: 
     PARAVIEW_VERSION: "6.1.1"

@@ -1,0 +1,58 @@
+.rules_binary_compatible:        
+  rules:
+    - if: $DISABLE_BINARY == "True"
+      when: never
+
+.rules_5_8:
+  rules:
+    - if: $DISABLE_5_8 == "True"
+      when: never
+    - if: $DISABLE_V581 == "True"
+      when: never
+
+.rules_5_9:
+  rules:
+    - if: $DISABLE_5_9 == "True"
+      when: never
+    - if: $DISABLE_V591 == "True"
+      when: never
+
+.rules_5_10:
+  rules:
+    - if: $DISABLE_5_10 == "True"
+      when: never
+    - if: $DISABLE_V5101 == "True"
+      when: never
+
+.rules_5_11:
+  rules:
+    - if: $DISABLE_5_11 == "True"
+      when: never
+    - if: $DISABLE_V5110 == "True"
+      when: never
+
+.rules_5_12:
+  rules:
+    - if: $DISABLE_5_12 == "True"
+      when: never
+
+.rules_5_13:
+  rules:
+    - if: $DISABLE_5_13 == "True"
+      when: never
+
+.rules_6_0:
+  rules:
+    - if: $DISABLE_6_0 == "True"
+      when: never
+
+.rules_6_1:
+  rules:
+    - if: $DISABLE_6_1 == "True"
+      when: never
+
+.rules_latest:
+  rules:
+    - if: $DISABLE_LATEST == "True"
+      when: never
+
