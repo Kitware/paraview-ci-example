@@ -16,6 +16,7 @@ build_binary_compatible_latest:
   rules:
     - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_latest", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
 
 build_plugin_latest:
@@ -24,6 +25,7 @@ build_plugin_latest:
     - .build_plugin
   rules:
     - !reference [".rules_latest", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
 
 test_plugin_latest:
@@ -36,4 +38,5 @@ test_plugin_latest:
     - build_plugin_latest
   rules:
     - !reference [".rules_latest", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success

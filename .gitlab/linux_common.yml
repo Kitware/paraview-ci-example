@@ -30,8 +30,6 @@
     paths:
       - build/
   interruptible: true
-  rules:
-    - !reference [".rules_linux", "rules"]
 
 .build_plugin:
   stage: build
@@ -50,8 +48,6 @@
     paths:
       - build/
   interruptible: true
-  rules:
-    - !reference [".rules_linux", "rules"]
 
 .test_plugin:
   stage: test
@@ -68,5 +64,3 @@
     paths:
       - build/
   interruptible: true
-  rules:
-    - !reference [".rules_linux", "rules"]

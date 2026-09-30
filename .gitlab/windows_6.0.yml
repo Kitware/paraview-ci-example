@@ -9,6 +9,8 @@ build_binary_compatible_win64_v6.0.1:
     - .build_binary_compatible_win64
   rules:
     - !reference [".rules_6_0", "rules"]
+    - !reference [".rules_windows", "rules"]
+    - !reference [".rules_binary_compatible", "rules"]
     - when: on_success
 
 test_binary_compatible_win64_v6.0.1:
@@ -22,4 +24,6 @@ test_binary_compatible_win64_v6.0.1:
     - build_binary_compatible_win64_v6.0.1
   rules:
     - !reference [".rules_6_0", "rules"]
+    - !reference [".rules_windows", "rules"]
+    - !reference [".rules_binary_compatible", "rules"]
     - when: on_success

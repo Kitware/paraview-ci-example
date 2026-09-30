@@ -11,6 +11,7 @@ build_binary_compatible_5.11.2:
   rules:
     - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_5_11", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
 
 .v5_11:
@@ -24,6 +25,7 @@ build_plugin_v5.11.2:
     - .build_plugin
   rules:
     - !reference [".rules_5_11", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
 
 test_plugin_v5.11.2:
@@ -37,4 +39,5 @@ test_plugin_v5.11.2:
     - build_plugin_v5.11.2
   rules:
     - !reference [".rules_5_11", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success

@@ -9,6 +9,7 @@ build_plugin_v5.8.1:
     - .build_plugin
   rules:
     - !reference [".rules_5_8", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
 
 test_plugin_v5.8.1:
@@ -21,4 +22,5 @@ test_plugin_v5.8.1:
     - build_plugin_v5.8.1
   rules:
     - !reference [".rules_5_8", "rules"]
+    - !reference [".rules_linux", "rules"]
     - when: on_success
