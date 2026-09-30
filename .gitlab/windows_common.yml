@@ -3,10 +3,13 @@
     name: kitware/paraview_org-plugin-devel-win:$PARAVIEW_VERSION
     entrypoint: ["powershell.exe"]
 
-.build_binary_compatible_win64: 
-  before_script:
+.before_script_windows: &before_script_windows
     - function Invoke-BatchFile { param([string]$Path, [string]$Parameters); $tempFile = [IO.Path]::GetTempFileName(); cmd.exe /c " `"$Path`" $Parameters && set > `"$tempFile`" "; Get-Content $tempFile | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }; Remove-Item $tempFile }; Invoke-BatchFile "C:\Program Files (x86)\Microsoft Visual Studio\BuildTools\VC\Auxiliary\Build\vcvars64.bat" 
     - if(!(Test-Path -Path C:\builds\paraview-ci\build\install)) { mkdir C:\builds\paraview-ci\build\; New-Item -Path C:\builds\paraview-ci\build\install -ItemType SymbolicLink -Value C:\pv\build\install } else { echo "Directory exists maybe due to caching..." } 
+
+.build_binary_compatible_win64: 
+  before_script:
+    - *before_script_windows
   stage: build
   script: 
     - mkdir build
@@ -25,9 +28,7 @@
 
 .test_binary_compatible_win64:
   before_script:
-    - function Invoke-BatchFile { param([string]$Path, [string]$Parameters); $tempFile = [IO.Path]::GetTempFileName(); cmd.exe /c " `"$Path`" $Parameters && set > `"$tempFile`" "; Get-Content $tempFile | Foreach-Object { if ($_ -match "^(.*?)=(.*)$") { Set-Content "env:\$($matches[1])" $matches[2] } }; Remove-Item $tempFile }; Invoke-BatchFile "C:\Program Files (x86)\Microsoft Visual Studio\BuildTools\VC\Auxiliary\Build\vcvars64.bat" 
-    - mkdir C:\builds\paraview-ci\build\
-    - New-Item -Path C:\builds\paraview-ci\build\install -ItemType SymbolicLink -Value C:\pv\build\install
+    - *before_script_windows
   stage: test
   script:
     - cd build
