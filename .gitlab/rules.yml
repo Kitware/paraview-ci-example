@@ -61,6 +61,11 @@
     - if: $DISABLE_6_1 == "True"
       when: never
 
+.rules_6_2:
+  rules:
+    - if: $DISABLE_6_2 == "True"
+      when: never
+
 .rules_latest:
   rules:
     - if: $DISABLE_LATEST == "True"

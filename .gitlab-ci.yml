@@ -16,6 +16,7 @@ include:
   - local: .gitlab/rules.yml
   - local: .gitlab/linux_common.yml
   - local: .gitlab/latest.yml
+  - local: .gitlab/6.2.yml
   - local: .gitlab/6.1.yml
   - local: .gitlab/6.0.yml
   - local: .gitlab/5.13.yml
@@ -26,5 +27,6 @@ include:
   - local: .gitlab/5.8.yml
   - local: .gitlab/windows_common.yml
   - local: .gitlab/windows_latest.yml
+  - local: .gitlab/windows_6.2.yml
   - local: .gitlab/windows_6.1.yml
   - local: .gitlab/windows_6.0.yml
