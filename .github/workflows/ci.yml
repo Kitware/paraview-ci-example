@@ -48,23 +48,23 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: [ 5.10.1, 5.11.2, 5.12.1, 5.13.3, 6.0.1, 6.1.1, latest ]
+        version: [ 5.10.1, 5.11.2, 5.12.1, 5.13.3, 6.0.1, 6.1.1, 6.2.0, latest ]
     container: kitware/paraview_org-plugin-devel:${{ matrix.version }}
 
     steps:
 
     - name: Set scl launcher
-      if: matrix.version != 'latest' && matrix.version != '6.0.1' && matrix.version != '6.1.1'
+      if: matrix.version != 'latest' && matrix.version != '6.0.1' && matrix.version != '6.1.1' && matrix.version != '6.2.0'
       shell: bash
       run: echo "LAUNCHER=scl enable devtoolset-7 --" >> $GITHUB_ENV
 
     - name: Set scl launcher latest
-      if: matrix.version == 'latest' || matrix.version == '6.0.1' || matrix.version == '6.1.1'
+      if: matrix.version == 'latest' || matrix.version == '6.0.1' || matrix.version == '6.1.1' || matrix.version == '6.2.0'
       shell: bash
       run: echo "LAUNCHER=scl enable gcc-toolset-10 --" >> $GITHUB_ENV
 
     - name: Install testing deps Centos 7
-      if: matrix.version != 'latest' && matrix.version != '6.0.1' && matrix.version != '6.1.1'
+      if: matrix.version != 'latest' && matrix.version != '6.0.1' && matrix.version != '6.1.1' && matrix.version != '6.2.0'
       shell: bash
       run: sed -i 's|mirror.centos.org|archive.kernel.org/centos-vault|g' /etc/yum.repos.d/*.repo; sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo; sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo; sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*; sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://archive.kernel.org/centos-vault|g' /etc/yum.repos.d/CentOS-*; yum clean all; yum --disablerepo=ius makecache; yum --disablerepo=ius -y install xorg-x11-server-Xvfb xcb-util-keysyms xcb-util-wm xcb-util-cursor libgfortran5
 
