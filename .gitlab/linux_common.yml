@@ -30,7 +30,9 @@
   stage: test
   before_script:
     - ln -s /paraview/gitlab-kitware-sciviz-ci/ /builds/gitlab-kitware-sciviz-ci
+    # Required only if using Paraview 5.x; centos 7 repos need to be patched to install xvfb. On Paraview 6.x images, xvfb is already installed
     - source /etc/os-release; if [[ "$VERSION" == "7 (Core)" ]]; then sed -i 's|mirror.centos.org|archive.kernel.org/centos-vault|g' /etc/yum.repos.d/*.repo; sed -i s/^#.*baseurl=http/baseurl=http/g /etc/yum.repos.d/*.repo; sed -i s/^mirrorlist=http/#mirrorlist=http/g /etc/yum.repos.d/*.repo; sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*; sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://archive.kernel.org/centos-vault|g' /etc/yum.repos.d/CentOS-*; yum clean all; yum --disablerepo=ius makecache; yum --disablerepo=ius -y install xorg-x11-server-Xvfb xcb-util-keysyms xcb-util-wm xcb-util-cursor libgfortran5; fi
+    # Again, here check is only required on Paraview 5.x. On Paraview 6, systematically add it to the LD_LIBRARY_PATH.
     - if [ -d  "/.gitlab/qt6/lib/" ]; then export LD_LIBRARY_PATH="/.gitlab/qt6/lib/"; fi
   script:
     - cd build
