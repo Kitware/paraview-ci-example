@@ -17,3 +17,11 @@ if (PARAVIEW_USE_PYTHON)
     NO_RT DIRECT_DATA
     TestPython.py)
 endif()
+
+vtk_module_test_data(
+  Data/example.vtkhdf
+)
+
+if (NOT vtk_testing_cxx_disabled)
+  add_subdirectory(Cxx)
+endif ()
