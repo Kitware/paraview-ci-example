@@ -5,7 +5,7 @@
 
 .before_script_windows: &before_script_windows
     # Activates vcvarsall
-    - '& "C:\Program Files (x86)\Microsoft Visual Studio\BuildTools\Common7\Tools\Launch-VsDevShell.ps1"'
+    - '& "C:\Program Files (x86)\Microsoft Visual Studio\BuildTools\Common7\Tools\Launch-VsDevShell.ps1" -Arch amd64'
     # Creates a symlink as in the linux CI, the build of ParaView use some absolute path. Testing for existence is required due to caching of C:\builds which can be preserved accross jobs, though the behaviour is eratic.
     - if(!(Test-Path -Path C:\builds\paraview-ci\build\install)) { mkdir C:\builds\paraview-ci\build\; New-Item -Path C:\builds\paraview-ci\build\install -ItemType SymbolicLink -Value C:\pv\build\install } else { echo "Directory exists maybe due to caching..." } 
 
