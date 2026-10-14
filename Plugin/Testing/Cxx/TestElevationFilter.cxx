@@ -15,11 +15,10 @@ int TestRegression(int argc, char** argv, std::string& baseline)
     filter->Update();
 
     return vtkTestUtilities::RegressionTest(argc, argv, filter->GetOutput(), baseline);
-
 }
 
 
 int TestElevationFilter(int argc, char** argv)
 {
-    return TestRegression(argc, argv, "Data/example.vtkhdf") ? EXIT_SUCCESS : EXIT_FAILURE;
+    return TestRegression(argc, argv, "/Data/example.vtkhdf") ? EXIT_SUCCESS : EXIT_FAILURE;
 }
