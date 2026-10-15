@@ -17,11 +17,3 @@ if (PARAVIEW_USE_PYTHON)
     NO_RT DIRECT_DATA
     TestPython.py)
 endif()
-
-if (ParaView_VERSION VERSION_GREATER_EQUAL "6.2.0")
-  set(_vtk_build_TEST_OUTPUT_DATA_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-  vtk_module_test_data(
-    ${CMAKE_CURRENT_SOURCE_DIR}/Data/BaselineData/TestElevationFilter.vtkhdf
-  )
-  add_subdirectory(Cxx)
-endif ()
