@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+// Note: This test is only compiled with paraview version >= 6.2.0, as vtkTestUtilities::RegressionTest is available on those versions
 int TestElevationFilter(int argc, char* argv[])
 {
 
