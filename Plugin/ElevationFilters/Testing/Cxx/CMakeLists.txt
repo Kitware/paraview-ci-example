@@ -1,0 +1,2 @@
+vtk_add_test_cxx(vtkTestElevationFilterCxxTests tests TestElevationFilter.cxx,NO_VALID)
+vtk_test_cxx_executable(vtkTestElevationFilterCxxTests tests)

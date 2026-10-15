@@ -4,3 +4,6 @@ DEPENDS
   VTK::FiltersCore
 PRIVATE_DEPENDS
   VTK::CommonCore
+TEST_DEPENDS
+  VTK::FiltersSources
+  VTK::TestingCore
