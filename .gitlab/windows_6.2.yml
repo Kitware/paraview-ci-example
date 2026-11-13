@@ -1,8 +1,8 @@
 .v6_2:
   variables: 
-    PARAVIEW_VERSION: "6.2.0"
+    PARAVIEW_VERSION: "6.2.1"
 
-build_binary_compatible_win64_v6.2.0:
+build_binary_compatible_win64_v6.2.1:
   extends:
     - .v6_2
     - .windows_image
@@ -13,15 +13,15 @@ build_binary_compatible_win64_v6.2.0:
     - !reference [".rules_binary_compatible", "rules"]
     - when: on_success
 
-test_binary_compatible_win64_v6.2.0:
+test_binary_compatible_win64_v6.2.1:
   extends:
     - .v6_2
     - .windows_image
     - .test_binary_compatible_win64
   dependencies:
-    - build_binary_compatible_win64_v6.2.0
+    - build_binary_compatible_win64_v6.2.1
   needs:
-    - build_binary_compatible_win64_v6.2.0
+    - build_binary_compatible_win64_v6.2.1
   rules:
     - !reference [".rules_6_2", "rules"]
     - !reference [".rules_windows", "rules"]

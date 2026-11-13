@@ -1,9 +1,9 @@
 .binary_6_2:
-  image: kitware/paraview_org-plugin-devel:6.2.0
+  image: kitware/paraview_org-plugin-devel:6.2.1
   variables:
-    PARAVIEW_VERSION: "6.2.0"
+    PARAVIEW_VERSION: "6.2.1"
 
-build_binary_compatible_6.2.0:
+build_binary_compatible_6.2.1:
   extends:
     - .binary_compatible_gcc10
     - .binary_6_2
@@ -14,14 +14,14 @@ build_binary_compatible_6.2.0:
     - !reference [".rules_linux", "rules"]
     - when: on_success
 
-test_binary_compatible_6.2.0:
+test_binary_compatible_6.2.1:
   extends:
     - .test_binary_compatible
     - .binary_6_2
   dependencies:
-    - build_binary_compatible_6.2.0
+    - build_binary_compatible_6.2.1
   needs:
-    - build_binary_compatible_6.2.0
+    - build_binary_compatible_6.2.1
   rules:
     - !reference [".rules_binary_compatible", "rules"]
     - !reference [".rules_6_2", "rules"]
